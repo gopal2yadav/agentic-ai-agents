@@ -16,6 +16,10 @@ class ToolCreate(BaseModel):
     name: str
     description: str = ""
 
+class RunRequest(BaseModel):
+    agent_name: str
+    input: str
+
 @app.get("/")
 async def read_root():
     return {"message": "Welcome to Agentic AI Agents API"}
@@ -28,7 +32,7 @@ async def list_agents():
 async def create_agent(agent: AgentCreate):
     if agent.name in agents_store:
         raise HTTPException(status_code=400, detail="Agent already exists")
-    agents_store[agent.name] = {"name": agent.name, "description": agent.description}
+    agents_store[agent.name] = agent.dict()
     return agents_store[agent.name]
 
 @app.get("/tools")
@@ -39,5 +43,12 @@ async def list_tools():
 async def create_tool(tool: ToolCreate):
     if tool.name in tools_store:
         raise HTTPException(status_code=400, detail="Tool already exists")
-    tools_store[tool.name] = {"name": tool.name, "description": tool.description}
+    tools_store[tool.name] = tool.dict()
     return tools_store[tool.name]
+
+@app.post("/runs")
+async def run_agent(req: RunRequest):
+    if req.agent_name not in agents_store:
+        raise HTTPException(status_code=404, detail="Agent not found")
+    # Simple echo response; integrate with agent runtime later
+    return {"agent": req.agent_name, "input": req.input, "output": f"Echo: {req.input}"}
