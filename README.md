@@ -10,3 +10,7 @@ This project aims to build agentic AI agents inspired by Moltbook. The goal is t
 
 ## Getting Started  
 This repository is currently a scaffold. Future commits will include Python code implementing the agent framework. Feel free to contribute!
+
+
+## Additional Documentation
+- [Flask deployment guide](docs/flask-deployment.md)
